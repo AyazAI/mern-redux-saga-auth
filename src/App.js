@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import {
+  incrementCounter,
+  decrementCounter,
+  fetchDataSuccess,
+  fetchData,
+} from "./redux/actions";
+import { connect } from "react-redux";
 
-function App() {
+function App({
+  incrementCounterAction,
+  decrementCounterAction,
+  fetchDataAction,
+  data,
+}) {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <br />
+      <h1>Fetch Some data ?</h1>
+      <button onClick={() => fetchDataAction()}>Fetch Data</button>
+      {data && console.log(data)}
+      {data &&
+        data.map((record) => {
+          return <li key={record.id}>{record.body}</li>;
+        })}
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = ({ posts }) => {
+  const { data } = posts;
+  return {
+    data,
+  };
+};
+
+export default connect(mapStateToProps, {
+  incrementCounterAction: incrementCounter,
+  decrementCounterAction: decrementCounter,
+  fetchDataAction: fetchData,
+})(App);
